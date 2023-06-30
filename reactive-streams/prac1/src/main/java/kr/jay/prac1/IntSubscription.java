@@ -1,4 +1,4 @@
-package kr.jay.reactivestreams;
+package kr.jay.prac1;
 
 import java.util.Iterator;
 import java.util.concurrent.ExecutorService;

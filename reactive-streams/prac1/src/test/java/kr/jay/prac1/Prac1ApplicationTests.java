@@ -1,10 +1,10 @@
-package kr.jay.reactivestreams;
+package kr.jay.prac1;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ReactiveStreamsApplicationTests {
+class Prac1ApplicationTests {
 
 	@Test
 	void contextLoads() {

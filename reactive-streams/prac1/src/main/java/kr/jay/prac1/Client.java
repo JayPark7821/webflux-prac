@@ -1,4 +1,6 @@
-package kr.jay.reactivestreams;
+package kr.jay.prac1;
+
+import static kr.jay.prac1.FixedIntPublisher.*;
 
 import java.util.concurrent.Flow;
 
@@ -12,8 +14,8 @@ import java.util.concurrent.Flow;
 public class Client {
 
 	public static void main(String[] args) throws InterruptedException {
-		Flow.Publisher publisher = new FixedIntPublisher();
-		Flow.Subscriber subscriber= new RequestNSubscriber<>(4);
+		Flow.Publisher<Result> publisher = new FixedIntPublisher();
+		Flow.Subscriber<Result> subscriber= new RequestNSubscriber<>(4);
 
 		publisher.subscribe(subscriber);
 

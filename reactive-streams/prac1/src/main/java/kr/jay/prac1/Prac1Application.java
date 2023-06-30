@@ -1,13 +1,13 @@
-package kr.jay.reactivestreams;
+package kr.jay.prac1;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ReactiveStreamsApplication {
+public class Prac1Application {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ReactiveStreamsApplication.class, args);
+		SpringApplication.run(Prac1Application.class, args);
 	}
 
 }

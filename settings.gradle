@@ -1,4 +1,6 @@
 rootProject.name = 'spring-webflux-prac'
 
 include 'completablefuture'
-include 'reactive-streams'
+include 'reactive-streams:prac1'
+include 'reactive-streams:prac2'
+include 'reactive-streams:projectreactor'

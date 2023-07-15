@@ -9,3 +9,8 @@ include 'selector'
 include 'reactor-pattern'
 include 'netty-prac'
 include 'reactor'
+include 'spring-webflux'
+include 'spring-webflux-example'
+include 'spring-webflux-example:webflux'
+include 'spring-webflux-example:webflux-image'
+

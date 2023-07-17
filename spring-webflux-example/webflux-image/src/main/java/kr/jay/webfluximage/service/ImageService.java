@@ -2,7 +2,9 @@ package kr.jay.webfluximage.service;
 
 import org.springframework.stereotype.Service;
 
+import kr.jay.webfluximage.entity.common.Image;
 import kr.jay.webfluximage.repository.ImageReactorRepository;
+import reactor.core.publisher.Mono;
 
 /**
  * ImageService
@@ -15,4 +17,9 @@ import kr.jay.webfluximage.repository.ImageReactorRepository;
 public class ImageService {
 
 	private final ImageReactorRepository imageRepository = new ImageReactorRepository();
+
+	public Mono<Image> getImageById(String imageId) {
+		return imageRepository.findById(imageId)
+			.map(imageEntity -> new Image(imageEntity.getId(), imageEntity.getName(), imageEntity.getUrl()));
+	}
 }

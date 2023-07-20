@@ -1,5 +1,8 @@
 package kr.jay.webflux.controller.dto;
 
+import java.util.Optional;
+
+import kr.jay.webflux.service.ImageResponse;
 import lombok.Data;
 
 /**
@@ -16,4 +19,5 @@ public class UserResponse  {
 	private final String name;
 	private final int age;
 	private final Long followCount;
+	private final Optional<ProfileImageResponse> imageResponse;
 }

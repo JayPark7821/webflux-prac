@@ -4,7 +4,10 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Component;
+import org.springframework.web.reactive.function.client.WebClient;
 
+import kr.jay.webflux.common.EmptyImage;
+import kr.jay.webflux.common.Image;
 import kr.jay.webflux.common.User;
 import kr.jay.webflux.repository.UserReactorRepository;
 import reactor.core.publisher.Mono;
@@ -18,19 +21,37 @@ import reactor.core.publisher.Mono;
  */
 @Component
 public class UserService {
-
+	private WebClient webClient = WebClient.create("http://localhost:8081");
 	private final UserReactorRepository userRepository = new UserReactorRepository();
 
 	public Mono<User> findById(String userId) {
 		return userRepository.findById(userId)
-			.map(userEntity -> new User(
-					userEntity.getId(),
-					userEntity.getName(),
-					userEntity.getAge(),
-					Optional.empty(),
-					List.of(),
-					0L
-				)
+			.flatMap(userEntity -> {
+					final String imageId = userEntity.getProfileImageId();
+				return webClient.get().uri("/api/images/{imageId}" , imageId)
+					.retrieve()
+					.toEntity(ImageResponse.class)
+					.map(response -> response.getBody())
+					.map(imageResponse -> new Image(
+						imageResponse.getId(),
+						imageResponse.getName(),
+						imageResponse.getUrl()
+					)).switchIfEmpty(Mono.just(new EmptyImage()))
+					.map(image -> {
+						  Optional<Image> profileImage = Optional.empty();
+						if(!(image instanceof EmptyImage))
+							profileImage = Optional.of(image);
+						return new User(
+							userEntity.getId(),
+							userEntity.getName(),
+							userEntity.getAge(),
+							profileImage,
+							List.of(),
+							0L
+						);
+					});
+
+				}
 			);
 	}
 }

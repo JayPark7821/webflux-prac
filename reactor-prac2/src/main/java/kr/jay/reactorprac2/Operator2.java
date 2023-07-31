@@ -1,0 +1,80 @@
+package kr.jay.reactorprac2;
+
+import java.time.Duration;
+import java.util.List;
+
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
+/**
+ * Operator2
+ *
+ * @author jaypark
+ * @version 1.0.0
+ * @since 2023/07/31
+ */
+public class Operator2 {
+	// concatMap
+	public Flux<Integer> fluxConcatMap() {
+		return Flux.range(1, 10)
+			.concatMap(i -> Flux.range(i * 10, 10)
+				.delayElements(Duration.ofMillis(100)))
+			.log();
+	}
+
+	// flatMapMany -> mono to flux
+	public Flux<Integer> monoFlatMapMany() {
+		return Mono.just(10)
+			.flatMapMany(i -> Flux.range(1, i))
+			.log();
+	}
+
+	// defaultIfEmpty, switchIfEmpty
+	public Mono<Integer> defaultIfEmpty() {
+		return Mono.just(100)
+			.filter(i -> i > 100)
+			.defaultIfEmpty(30);
+
+	}
+
+	public Mono<Integer> switchIfEmpty() {
+		return Mono.just(100)
+			.filter(i -> i > 100)
+			.switchIfEmpty(Mono.just(30)
+				.map(i -> i * 2));
+	}
+
+	public Mono<Integer> switchIfEmpty2() {
+		return Mono.just(100)
+			.filter(i -> i > 100)
+			.switchIfEmpty(Mono.error(new Exception("error")))
+			.log();
+	}
+
+	// merge & zip
+	public Flux<String> fluxMerge() {
+		return Flux.merge(
+				Flux.fromIterable(List.of("1", "2", "3")),
+				Mono.just("4")
+			)
+			.log();
+	}
+
+	public Flux<String> monoMerge() {
+		return Mono.just("a").mergeWith(Mono.just("b"))
+			.log();
+	}
+
+	public Flux<String> fluxZip(){
+		 return Flux.zip(
+			Flux.just("a", "b", "c"),
+			Flux.just("d", "e", "f")
+		).map(i -> i.getT1() + i.getT2())
+			 .log();
+	}
+
+	public Mono<Integer> monoZip(){
+		return Mono.zip(Mono.just(1), Mono.just(2), Mono.just(3))
+			.map(i -> i.getT1() + i.getT2() + i.getT3());
+	}
+}

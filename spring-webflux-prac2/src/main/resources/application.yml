@@ -1,0 +1,13 @@
+logging:
+  level:
+    root: info
+
+server:
+  port: 8087
+
+
+spring:
+  r2dbc:
+    url: r2dbc:mysql://localhost:13306/fastsns
+    username: root
+    password: admin

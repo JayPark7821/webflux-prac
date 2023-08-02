@@ -3,6 +3,7 @@ package kr.jay.springwebfluxprac2.controller;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.Test;
@@ -16,9 +17,13 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import kr.jay.springwebfluxprac2.dto.UserCreateRequest;
 import kr.jay.springwebfluxprac2.dto.UserResponse;
 import kr.jay.springwebfluxprac2.repository.user.User;
+import kr.jay.springwebfluxprac2.service.PostService;
+import kr.jay.springwebfluxprac2.service.PostServiceV2;
 import kr.jay.springwebfluxprac2.service.UserService;
+import reactor.blockhound.BlockHound;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
 
 /**
  * UserControllerTest
@@ -32,11 +37,32 @@ import reactor.core.publisher.Mono;
 @AutoConfigureWebTestClient
 class UserControllerTest {
 
+	static{
+		BlockHound.install(
+			builder -> builder.allowBlockingCallsInside("org.springframework.data.redis.connection.ReactiveRedisConnection", "stringCommands")
+		);
+	}
+
 	@Autowired
 	private WebTestClient webTestClient;
 
 	@MockBean
 	private UserService userService;
+	@MockBean
+	private PostServiceV2 postServiceV2 ;
+
+	@Test
+	void blockHound() throws Exception{
+		StepVerifier.create(Mono.delay(Duration.ofSeconds(1))
+				.doOnNext(it -> {
+
+					try {
+						Thread.sleep(100);
+					} catch (InterruptedException e) {
+						throw new RuntimeException(e);
+					}
+				})).verifyComplete();
+	}
 
 	@Test
 	void createUser() {

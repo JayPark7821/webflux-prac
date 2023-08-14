@@ -15,4 +15,5 @@ include 'spring-webflux-prac2'
 include 'spring-webflux-example'
 include 'spring-webflux-example:webflux'
 include 'spring-webflux-example:webflux-image'
+include 'r2dbc-prac'
 

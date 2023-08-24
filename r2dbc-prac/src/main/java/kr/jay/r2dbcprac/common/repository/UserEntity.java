@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.annotation.PersistenceCreator;
 import org.springframework.data.relational.core.mapping.Table;
 
 import lombok.AllArgsConstructor;
@@ -24,6 +25,21 @@ public class UserEntity {
     private LocalDateTime createdAt;
     @LastModifiedDate
     private LocalDateTime updatedAt;
+
+    @PersistenceCreator
+    public UserEntity(
+        final Long id,
+        final String name,
+        final Integer age,
+        final String profileImageId,
+        final String password
+    ) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
+        this.profileImageId = profileImageId;
+        this.password = password;
+    }
 
     public UserEntity(final String name, final Integer age, final String profileImageId, final String password) {
         this.name = name;

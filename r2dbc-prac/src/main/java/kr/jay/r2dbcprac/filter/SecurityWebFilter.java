@@ -11,6 +11,7 @@ import org.springframework.web.server.WebFilterChain;
 import kr.jay.r2dbcprac.auth.IamAuthentication;
 import kr.jay.r2dbcprac.service.AuthService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 import reactor.util.context.Context;
 
@@ -21,6 +22,8 @@ import reactor.util.context.Context;
  * @version 1.0.0
  * @since 2023/07/20
  */
+
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class SecurityWebFilter implements WebFilter {
@@ -30,9 +33,12 @@ public class SecurityWebFilter implements WebFilter {
 	public Mono<Void> filter(final ServerWebExchange exchange, final WebFilterChain chain) {
 		final ServerHttpResponse response = exchange.getResponse();
 		final ServerHttpRequest request = exchange.getRequest();
-
+		log.info("===========================");
 		final String iam = request.getHeaders().getFirst("X-I-AM");
 
+		if (request.getURI().getPath().equals("/api/users/signup")) {
+			return chain.filter(exchange);
+		}
 		if (iam == null) {
 			response.setStatusCode(org.springframework.http.HttpStatus.UNAUTHORIZED);
 			return response.setComplete();

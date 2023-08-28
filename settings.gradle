@@ -18,6 +18,7 @@ include 'spring-webflux-example:webflux-image'
 include 'r2dbc-prac'
 include 'spring-coroutine-prac'
 include 'wating-queue'
+include 'wating-queue:flow'
 include 'wating-queue:website'
 
 

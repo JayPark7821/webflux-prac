@@ -1,11 +1,14 @@
 package kr.jay.flow.controller;
 
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.jay.flow.dto.AllowUserResponse;
+import kr.jay.flow.dto.AllowedUserResponse;
+import kr.jay.flow.dto.RankNumberResponse;
 import kr.jay.flow.dto.RegisterUserResponse;
 import kr.jay.flow.service.UserQueueService;
 import lombok.RequiredArgsConstructor;
@@ -41,5 +44,23 @@ public class UserQueueController {
 	){
 		return userQueueService.allowUser(queue, count)
 			.map(allowed -> new AllowUserResponse(count, allowed));
+	}
+
+	@GetMapping("/allowed")
+	Mono<AllowedUserResponse> isAllowed(
+		@RequestParam(name = "queue", defaultValue = "default") final String queue,
+		@RequestParam("userId") final Long userId
+	){
+		return userQueueService.isAllowed(queue, userId)
+			.map(AllowedUserResponse::new);
+	}
+
+	@GetMapping("/rank")
+	Mono<RankNumberResponse> getRank(
+		@RequestParam(name = "queue", defaultValue = "default") final String queue,
+		@RequestParam("userId") final Long userId
+	){
+		return userQueueService.getRank(queue, userId)
+			.map(RankNumberResponse::new);
 	}
 }
